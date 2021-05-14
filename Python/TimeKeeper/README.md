@@ -7,3 +7,5 @@ Accepts a parameter for seconds for automation:
   For example, to start the application with a refresh time of 60 seconds use:
 	
     TimeKeeper.exe 60 
+
+Icon file used is not my own. It was a free to use one.
