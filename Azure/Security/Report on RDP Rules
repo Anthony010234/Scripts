@@ -1,7 +1,12 @@
+#Script can be run in Azure powershell console
+
+#Start a report/transcript
 Start-Transcript -Path "RDPRules.txt" -NoClobber
 
+#Get list of all subscriptions you have access to
 $AzureSubscriptions =  (Get-AzSubscription).ID
 
+#For each Subscription, get NSGS and search for RDP rules
 foreach ($Sub in $AzureSubscriptions){
 
 	Select-AzSubscription -SubscriptionId $Sub
@@ -13,4 +18,5 @@ foreach ($Sub in $AzureSubscriptions){
 	}
 }
 
+#Stop the report / Transcript
 Stop-Transcript
