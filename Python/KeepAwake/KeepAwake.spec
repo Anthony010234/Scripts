@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(['KeepAwake.py'],
-             pathex=['C:\\Users\\anthonyh\\OneDrive - The Smith Family\\Desktop\\Python Scripts\\KeepAwake'],
+             pathex=['C:\\Users\\anthonyh\\GITSM\\Scripts\\Python\\KeepAwake'],
              binaries=[],
              datas=[],
              hiddenimports=[],
