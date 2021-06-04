@@ -2,7 +2,7 @@ import keyboard,time,datetime,os,sys
 from datetime import datetime
 from os import system
 
-system("title "+"KeepAwake ")
+system("title "+"KeepAwake - By: Anthony ")
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++
 #VARIABLES BELOW
