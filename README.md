@@ -1,3 +1,4 @@
 # Scripts
 
-Just a collection of both fun and handy scripts
+Just a collection of handy scripts
+It will take me some time to scrub my old scripts and upload them here for public use
