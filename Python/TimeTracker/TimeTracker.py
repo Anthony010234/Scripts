@@ -136,7 +136,7 @@ def Settings():
 
     global RefreshKA
 
-    Settings_timetracker = tkinter.Tk('')
+    Settings_timetracker = tkinter.Tk()
     Settings_timetracker.title('Settings')
     Settings_timetracker.resizable(0,0)
     Settings_timetracker.geometry('375x300')
@@ -211,7 +211,7 @@ def Settings():
 #About Screen
 def About():
     #Splash screen Configuration
-    Splash_timetracker = tkinter.Tk('')
+    Splash_timetracker = tkinter.Tk()
     Splash_timetracker.title('About')
     Splash_timetracker.resizable(0,0)
     Splash_timetracker.iconbitmap('stopwatch_icon-icons.com_64805.ico')
