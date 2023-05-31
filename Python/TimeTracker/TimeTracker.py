@@ -155,12 +155,13 @@ def Settings():
 
 
     Label(Settings_timetracker, text='Work Hours. example: 7h 30m is 7.5 \nCurrently: '+DefaultHours+' Hours').grid(row=0)
-    e1 = Entry(Settings_timetracker)
-    e1.grid(row=0, column=1)
+    e1 = Entry(Settings_timetracker,width=7)
+    e1.grid(row=0, column=1,sticky=W)
+    
 
     Label(Settings_timetracker, text='KeepAwake? (in Seconds) 0=disabled \nCurrently: '+DefaultKeepAwake+' Seconds').grid(row=1)
-    e2 = Entry(Settings_timetracker)
-    e2.grid(row=1, column=1)
+    e2 = Entry(Settings_timetracker,width=7)
+    e2.grid(row=1, column=1,sticky=W)
 
     
 
