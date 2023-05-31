@@ -239,7 +239,7 @@ def About():
     
 
 #Main Window Configuration
-Main_timetracker = tkinter.Tk('')
+Main_timetracker = tkinter.Tk()
 Main_timetracker.title('Work Time Tracker')
 Main_timetracker.resizable(0,0)
 Main_timetracker.geometry("300x200")
