@@ -140,11 +140,11 @@ def Settings():
     Settings_timetracker.title('Settings')
     Settings_timetracker.resizable(0,0)
     Settings_timetracker.geometry('375x300')
-    Settings_timetracker.iconbitmap('stopwatch_icon-icons.com_64805.ico')
+    #Settings_timetracker.iconbitmap('stopwatch_icon-icons.com_64805.ico')
     Settings_timetracker.lift()
     Settings_timetracker.attributes("-topmost", True)
 
-    Main_timetracker.attributes('-disabled', 1)
+    Main_timetracker.attributes('-type', 1)
     
     Default_time = open("Settings.config", "r")
     for x in Default_time:
@@ -196,7 +196,7 @@ def Settings():
     
     def on_closing():
         Main_timetracker.lift()
-        Main_timetracker.attributes('-disabled', 0)
+        Main_timetracker.attributes('-topmost', 0)
         Settings_timetracker.destroy()
 
     
@@ -214,7 +214,7 @@ def About():
     Splash_timetracker = tkinter.Tk()
     Splash_timetracker.title('About')
     Splash_timetracker.resizable(0,0)
-    Splash_timetracker.iconbitmap('stopwatch_icon-icons.com_64805.ico')
+    #Splash_timetracker.iconbitmap('stopwatch_icon-icons.com_64805.ico')
     Splash_timetracker.lift()
     Splash_timetracker.attributes("-topmost", True)
     
@@ -228,10 +228,10 @@ def About():
 
     def on_closing():
         Main_timetracker.lift()
-        Main_timetracker.attributes('-disabled', 0)
+        Main_timetracker.attributes('-type', 0)
         Splash_timetracker.destroy()
         
-    Main_timetracker.attributes('-disabled', 1)
+    Main_timetracker.attributes('-type', 1)
     Splash_timetracker.protocol("WM_DELETE_WINDOW", on_closing)
     Splash_timetracker.mainloop()
 
@@ -243,7 +243,7 @@ Main_timetracker = tkinter.Tk()
 Main_timetracker.title('Work Time Tracker')
 Main_timetracker.resizable(0,0)
 Main_timetracker.geometry("300x200")
-Main_timetracker.iconbitmap('stopwatch_icon-icons.com_64805.ico')
+#Main_timetracker.iconbitmap('stopwatch_icon-icons.com_64805.ico')
 Main_timetracker.lift()
 
 def on_close():
