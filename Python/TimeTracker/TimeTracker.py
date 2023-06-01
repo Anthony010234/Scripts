@@ -218,28 +218,22 @@ def Settings():
             NewKeepAwake = 'KeepAwake='+DefaultKeepAwake
             print("KeeoldpAwake "+NewKeepAwake)
 
-            #newfile = open("Settings.config", "w")
         with open('Settings.config', 'w') as file_object:
             file_object.write(NewHours+'\n'+NewKeepAwake)
             file_object.close()
         RefreshKA = 0
         on_closing()
         
-        
-    
     def on_closing():
         Main_timetracker.lift()
         Main_timetracker.attributes('-topmost', 0)
         Settings_timetracker.destroy()
 
-    
     Save_button = Button(Settings_timetracker, text='Save', width=10,command=On_Save)
     Save_button.place(x=10, y=250)
 
-    
     Settings_timetracker.protocol("WM_DELETE_WINDOW", on_closing)
     Settings_timetracker.mainloop()
-
 
 #About Screen
 def About():
@@ -280,16 +274,21 @@ Main_timetracker.geometry("300x170")
 Main_timetracker.lift()
 
 def on_close():
-    response=messagebox.askyesno('Exit','Are you sure you want to exit?')
+    response=messagebox.askyesno('Exit','Exit?\n\n(Un-Recorded times will be lost!!)')
     if response:
         Main_timetracker.destroy()
 
 #Menubar Configuration
 menubar = Menu(Main_timetracker)
+
 filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label="Settings", command=Settings)
 filemenu.add_command(label="Exit", command=Main_timetracker.quit)
 menubar.add_cascade(label="File", menu=filemenu)
+
+viewmenu = Menu(menubar, tearoff=0)
+viewmenu.add_command(label="Recorded History", command=Settings)
+menubar.add_cascade(label="View", menu=viewmenu)
 
 helpmenu = Menu(menubar, tearoff=0)
 helpmenu.add_command(label="About...", command=About)
