@@ -85,7 +85,7 @@ def Start(label):
     counter_label(label) 
     start['state']='disabled'
     stop['state']='normal'
-    reset['state']='normal'
+    reset['state']='disabled'
     Record['state']='disabled'
     label.config(bg='Green')
 
@@ -115,33 +115,46 @@ def Stop():
     Record['state']='normal'
 
 def Record():
-    
-    DateTimeValue = date1.datetime.now()
-    DateToday = DateTimeValue.strftime("%d_%m_%Y")
 
-    try:
-        file = open('recordedtime.txt', 'r')
-        file.close()
-    except IOError:
+    response=messagebox.askyesno('Reset?','Confirm: Record & Reset Time?')
+    if response:
+    
+        DateTimeValue = date1.datetime.now()
+        DateToday = DateTimeValue.strftime("%d_%m_%Y")
+
+        try:
+            file = open('recordedtime.txt', 'r')
+            file.close()
+        except IOError:
+            with open('recordedtime.txt', 'a') as file_object:
+                file_object.write("Date,TotalTime"+'\n')
+                file_object.close()
+
         with open('recordedtime.txt', 'a') as file_object:
-            file_object.write("Date,TotalTime"+'\n')
+            file_object.write(DateToday+","+label.cget("text")+'\n')
             file_object.close()
 
-    with open('recordedtime.txt', 'a') as file_object:
-        file_object.write(DateToday+","+label.cget("text")+'\n')
-        file_object.close()
+        if running==False:       
+            reset['state']='disabled'
+            Record['state']='disabled'
+            label['text']='00:00:00'
+            label.config(bg='white')
+
+        global counter 
+        counter=66600
 
 # Reset function of the stopwatch 
 def Reset(label):
     
-    response=messagebox.askyesno('Reset?','Are you sure you want to Reset?')
+    response=messagebox.askyesno('Reset?','Confirm: Reset Timer?')
     if response:
         global counter 
         counter=66600
         
-        # If rest is pressed after pressing stop. 
+        # If reset is pressed after pressing stop. 
         if running==False:       
             reset['state']='disabled'
+            Record['state']='disabled'
             label['text']='00:00:00'
             label.config(bg='white')
         
@@ -298,12 +311,12 @@ label.place(relx=0.12, rely=0.05)
 start = Button(Main_timetracker, text='Start', width=8, command=lambda:Start(label))
 stop = Button(Main_timetracker, text='Pause',width=8,state='disabled', command=Stop) 
 reset = Button(Main_timetracker, text='Reset',width=8, state='disabled', command=lambda:Reset(label))
-Record = Button(Main_timetracker, text='RecordTime',width=8, state='disabled', command=Record)
+Record = Button(Main_timetracker, text="Record &\nReset",width=8, state='disabled', command=Record)
 
 start.place(x='40',y='70')
 reset.place(x='168',y='70')
 stop.place(x='40',y='100')
-Record.place(x='168',y='100')
+Record.place(x='168',y='110')
 
 
 #Luanch Main Window
