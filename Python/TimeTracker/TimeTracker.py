@@ -243,7 +243,7 @@ def About():
 Main_timetracker = tkinter.Tk()
 Main_timetracker.title('Work Time Tracker')
 Main_timetracker.resizable(0,0)
-Main_timetracker.geometry("300x200")
+Main_timetracker.geometry("300x170")
 #Main_timetracker.iconbitmap('stopwatch_icon-icons.com_64805.ico')
 Main_timetracker.lift()
 
@@ -273,8 +273,9 @@ except FileNotFoundError:
                 file_object.write('Hours=7.6'+'\n'+'KeepAwake=0')
                 file_object.close()
 
-label = Label(Main_timetracker, text="00:00:00", fg="black", font="Verdana 30 bold", relief='sunken', bg='white',anchor='center')
-label.pack()
+label = Label(Main_timetracker, text="00:00:00", fg="black", font="Verdana 30 bold", relief='sunken', bg='white', width= 8)
+label.place(relx=0.12, rely=0.05)
+#label.pack()
 
 
 
@@ -282,9 +283,9 @@ start = Button(Main_timetracker, text='Start', width=8, command=lambda:Start(lab
 stop = Button(Main_timetracker, text='Pause',width=8,state='disabled', command=Stop) 
 reset = Button(Main_timetracker, text='Reset',width=8, state='disabled', command=lambda:Reset(label))
 
-start.place(x='50',y='70')
-reset.place(x='180',y='70')
-stop.place(x='50',y='100')
+start.place(x='40',y='70')
+reset.place(x='168',y='70')
+stop.place(x='40',y='100')
 
 
 #Luanch Main Window
