@@ -1,6 +1,7 @@
 #Import required modules
 import tkinter,os,sys,datetime,keyboard
 import time as time1
+import datetime as date1
 from time import *
 from datetime import *
 from os import system
@@ -19,7 +20,6 @@ global Count
 KeepAwakeSeconds = 0
 RefreshKA = 0
 Count = 0
-
 
 counter = 66600
 running = False
@@ -86,6 +86,7 @@ def Start(label):
     start['state']='disabled'
     stop['state']='normal'
     reset['state']='normal'
+    Record['state']='disabled'
     label.config(bg='Green')
 
 
@@ -111,6 +112,24 @@ def Stop():
     start['state']='normal'
     stop['state']='disabled'
     reset['state']='normal'
+    Record['state']='normal'
+
+def Record():
+    
+    DateTimeValue = date1.datetime.now()
+    DateToday = DateTimeValue.strftime("%d_%m_%Y")
+
+    try:
+        file = open('recordedtime.txt', 'r')
+        file.close()
+    except IOError:
+        with open('recordedtime.txt', 'a') as file_object:
+            file_object.write("Date,TotalTime"+'\n')
+            file_object.close()
+
+    with open('recordedtime.txt', 'a') as file_object:
+        file_object.write(DateToday+","+label.cget("text")+'\n')
+        file_object.close()
 
 # Reset function of the stopwatch 
 def Reset(label):
@@ -279,10 +298,12 @@ label.place(relx=0.12, rely=0.05)
 start = Button(Main_timetracker, text='Start', width=8, command=lambda:Start(label))
 stop = Button(Main_timetracker, text='Pause',width=8,state='disabled', command=Stop) 
 reset = Button(Main_timetracker, text='Reset',width=8, state='disabled', command=lambda:Reset(label))
+Record = Button(Main_timetracker, text='RecordTime',width=8, state='disabled', command=Record)
 
 start.place(x='40',y='70')
 reset.place(x='168',y='70')
 stop.place(x='40',y='100')
+Record.place(x='168',y='100')
 
 
 #Luanch Main Window
