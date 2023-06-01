@@ -275,9 +275,6 @@ except FileNotFoundError:
 
 label = Label(Main_timetracker, text="00:00:00", fg="black", font="Verdana 30 bold", relief='sunken', bg='white', width= 8)
 label.place(relx=0.12, rely=0.05)
-#label.pack()
-
-
 
 start = Button(Main_timetracker, text='Start', width=8, command=lambda:Start(label))
 stop = Button(Main_timetracker, text='Pause',width=8,state='disabled', command=Stop) 
