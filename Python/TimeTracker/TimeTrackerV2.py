@@ -1,21 +1,17 @@
-#Import required modules
 import tkinter as tk
-import csv
+import csv, os, sys, datetime, keyboard
 import matplotlib.pyplot as plt
-import tkinter,os,sys,datetime,keyboard
 import time as time1
 import datetime as date1
-from time import *
 from datetime import *
-from os import system
-from tkinter import messagebox
 from tkinter import *
-from tkinter.font import BOLD
+from tkinter import messagebox
 from pandastable import Table
 
 #Set working directory to be script location
 os.chdir(os.path.dirname(sys.argv[0]))
 
+global filepath
 global KeepAwakeSeconds
 global RefreshKA
 global ResetCount
@@ -29,6 +25,10 @@ counter = 66600
 running = False
 tt2=datetime.fromtimestamp(counter)
 
+filepath = "recordedtime.txt"
+
+HEIGHT = 300
+WIDTH = 500
 
 def counter_label(label): 
     def count(): 
@@ -137,7 +137,7 @@ def Record():
                 file_object.close()
 
         with open("recordedtime.txt", 'a') as file_object:
-            file_object.write(DateToday+","+label.cget("text")[0:3]+'\n')
+            file_object.write(DateToday+","+label.cget("text")+'\n')
             file_object.close()
 
         if running==False:       
@@ -169,16 +169,50 @@ def Reset(label):
             label['text']='00:00:00'
             label.config(bg='Green')
 
-def chartview():
+
+def TableView():
+    Window = tk.Toplevel()
+    canvas = tk.Canvas(Window, height=HEIGHT, width=WIDTH)
+
+    class TestApp(tk.Frame):
+        def __init__(self, parent, filepath):
+            super().__init__(parent)
+            self.table = Table(self, showtoolbar=False, showstatusbar=False)
+            self.table.importCSV(filepath)
+            self.table.show()
+
+
+    app = TestApp(canvas, filepath)
+    app.pack(fill=tk.BOTH)
+
+    chartbutton = tk.Button(canvas, text="Chart View", bg='White', fg='Black',command=lambda: ChartView())
+    chartbutton.pack()
+
+    
+    def on_close():
+        MainForm.deiconify()
+        Window.destroy()
+
+    MainForm.withdraw()
+    Window.protocol("WM_DELETE_WINDOW", on_close)
+    canvas.pack()
+
+def ChartView():
+
     xaxis = []
     yaxis = []
 
-    with open("recordedtime.txt",'r') as inf:
+
+    with open(filepath,'r') as inf:
         content = csv.reader(inf, delimiter=",")
         next(content)
         for row in content:
             Date = row[0]
             TotalTime = row[1]
+
+            #if TotalTime == "0:0":
+                #continue
+
 
             xaxis.append(Date)
             yaxis.append(TotalTime)
@@ -193,75 +227,17 @@ def chartview():
     plt.ylabel("Date")
     plt.tight_layout(pad=4)
     plt.xticks(rotation=45)
-
     plt.show()
 
-def tableview():
 
-    filepath = "/home/owner/GIT/Scripts/Python/TimeTracker/recordedtime.txt"
-
-    chartform = tkinter.Tk()
-    chartform.geometry('800x600+10+10')
-    chartform.title('Time History')
-
-    class TestApp(tk.Frame):
-        def __init__(self, parent, filepath):
-            super().__init__(parent)
-            self.table = Table(self, showtoolbar=True, showstatusbar=True)
-            self.table.importCSV(filepath)
-            self.table.show()
-
-    app = TestApp(chartform, filepath)
-    app.pack(fill=tk.BOTH, expand=1)
-
-    chartform.mainloop()
-
-
-def timehistory():
-
-    timehistory_timetracker = tkinter.Tk()
-    timehistory_timetracker.title('Time History')
-    timehistory_timetracker.geometry('300x300')
-    timehistory_timetracker.resizable(0,0)
-    timehistory_timetracker.lift()
-    timehistory_timetracker.attributes("-topmost", True)
-
-    Main_timetracker.withdraw()
-
-    chart_button = Button(timehistory_timetracker, text='View Chart', width=10,command=chartview)
-    chart_button.place(x=10, y=10)
-
-    table_button = Button(timehistory_timetracker, text='View Table', width=10,command=tableview)
-    table_button.place(x=10, y=40)
-
-    def on_closing():
-        Main_timetracker.deiconify()
-        Main_timetracker.lift()
-        Main_timetracker.attributes('-type', 0)
-        timehistory_timetracker.destroy()
-        
-    Main_timetracker.attributes('-type', 1)
-    timehistory_timetracker.protocol("WM_DELETE_WINDOW", on_closing)
-    timehistory_timetracker.mainloop()
-
-
-
-#Settings Screen
 def Settings():
+
+    Window = tk.Toplevel()
+    Window.geometry('500x300')
+    #canvas = tk.Canvas(Window, height=HEIGHT, width=WIDTH)
 
     global RefreshKA
 
-    Settings_timetracker = tkinter.Tk()
-    Settings_timetracker.title('Settings')
-    Settings_timetracker.resizable(0,0)
-    Settings_timetracker.geometry('375x300')
-    Settings_timetracker.lift()
-    Settings_timetracker.attributes("-topmost", True)
-
-    Main_timetracker.withdraw()
-
-    Main_timetracker.attributes('-type', 1)
-    
     Default_time = open("Settings.config", "r")
     for x in Default_time:
         if 'Hours' in x:
@@ -270,13 +246,13 @@ def Settings():
             DefaultKeepAwake = x.replace('\n','').replace('KeepAwake=','')
 
 
-    Label(Settings_timetracker, text='Work Hours. example: 7h 30m is 7.5 \nCurrently: '+DefaultHours+' Hours').grid(row=0)
-    e1 = Entry(Settings_timetracker,width=7)
+    Label(Window, text='Work Hours. example: 7h 30m is 7.5 \nCurrently: '+DefaultHours+' Hours').grid(row=0)
+    e1 = Entry(Window,width=7)
     e1.grid(row=0, column=1,sticky=W)
     
 
-    Label(Settings_timetracker, text='KeepAwake? (in Seconds) 0=disabled \nCurrently: '+DefaultKeepAwake+' Seconds').grid(row=1)
-    e2 = Entry(Settings_timetracker,width=7)
+    Label(Window, text='KeepAwake? (in Seconds) 0=disabled \nCurrently: '+DefaultKeepAwake+' Seconds').grid(row=1)
+    e2 = Entry(Window,width=7)
     e2.grid(row=1, column=1,sticky=W)
 
     
@@ -306,96 +282,57 @@ def Settings():
             file_object.write(NewHours+'\n'+NewKeepAwake)
             file_object.close()
         RefreshKA = 0
-        on_closing()
+        on_close()
         
-    def on_closing():
-        Main_timetracker.deiconify()
-        Main_timetracker.lift()
-        Main_timetracker.attributes('-topmost', 0)
-        Settings_timetracker.destroy()
 
-    Save_button = Button(Settings_timetracker, text='Save', width=10,command=On_Save)
+
+    Save_button = Button(Window, text='Save', width=10,command=On_Save)
     Save_button.place(x=10, y=250)
-
-    Settings_timetracker.protocol("WM_DELETE_WINDOW", on_closing)
-    Settings_timetracker.mainloop()
-
-#About Screen
-def About():
-    #Splash screen Configuration
-    Splash_timetracker = tkinter.Tk()
-    Splash_timetracker.title('About')
-    Splash_timetracker.resizable(0,0)
-    Splash_timetracker.lift()
-    Splash_timetracker.attributes("-topmost", True)
     
-    About_Label = Message(Splash_timetracker, text="Work Time Tracker", width=400,font=('Arial', 24, BOLD))
-    About_Label3 = Message(Splash_timetracker, text="This app was designed to help with time management while working from home.\n", width=300,font=('Arial', 10))
-    About_Label2 = Message(Splash_timetracker, text="App Created By: Anthony\nIcon made by EpicCoders from https://icon-icons.com/\n\nCode References:\nhttps://www.geeksforgeeks.org/create-stopwatch-using-python/", width=400,font=('Arial', 10))
-    
-    About_Label.pack()
-    About_Label3.pack()
-    About_Label2.pack()
-    Main_timetracker.withdraw()
+    def on_close():
+        MainForm.deiconify()
+        Window.destroy()
 
-    def on_closing():
-        Main_timetracker.deiconify()
-        Main_timetracker.lift()
-        Main_timetracker.attributes('-type', 0)
-        Splash_timetracker.destroy()
-        
-    Main_timetracker.attributes('-type', 1)
-    Splash_timetracker.protocol("WM_DELETE_WINDOW", on_closing)
-    Splash_timetracker.mainloop()
+    MainForm.withdraw()
+
+    Window.protocol("WM_DELETE_WINDOW", on_close)
+    canvas.pack()
 
 
-    
 
-#Main Window Configuration
-Main_timetracker = tkinter.Tk()
-Main_timetracker.title('Work Time Tracker')
-Main_timetracker.resizable(0,0)
-Main_timetracker.geometry("300x170")
-Main_timetracker.lift()
 
-def on_close():
-    response=messagebox.askyesno('Exit','Exit?\n\n(Un-Recorded times will be lost!!)')
-    if response:
-        Main_timetracker.destroy()
 
-#Menubar Configuration
-menubar = Menu(Main_timetracker)
 
-filemenu = Menu(menubar, tearoff=0)
-filemenu.add_command(label="Settings", command=Settings)
-filemenu.add_command(label="Exit", command=Main_timetracker.quit)
-menubar.add_cascade(label="File", menu=filemenu)
 
-viewmenu = Menu(menubar, tearoff=0)
-viewmenu.add_command(label="Recorded History", command=timehistory)
-menubar.add_cascade(label="View", menu=viewmenu)
 
-helpmenu = Menu(menubar, tearoff=0)
-helpmenu.add_command(label="About...", command=About)
-menubar.add_cascade(label="Help", menu=helpmenu)
 
-Main_timetracker.config(menu=menubar)
 
-try:
-  open('Settings.config')
-except FileNotFoundError:
-  #open('Settings.config',"a")
-  with open('Settings.config', 'w') as file_object:
-                file_object.write('Hours=7.6'+'\n'+'KeepAwake=0')
-                file_object.close()
 
-label = Label(Main_timetracker, text="00:00:00", fg="black", font="Verdana 30 bold", relief='sunken', bg='white', width= 8)
+
+
+
+
+
+############### MAIN FORM FOR TIME TRACKER ###############
+
+MainForm = tk.Tk()
+MainForm.title("Python Guides")
+
+
+
+
+
+############### MAIN FORM CANVAS!! ###############
+
+canvas = tk.Canvas(MainForm, height=170, width=300)
+
+label = Label(canvas, text="00:00:00", fg="black", font="Verdana 30 bold", relief='sunken', bg='white', width= 8)
 label.place(relx=0.12, rely=0.05)
 
-start = Button(Main_timetracker, text='Start', width=8, command=lambda:Start(label))
-stop = Button(Main_timetracker, text='Pause',width=8,state='disabled', command=Stop) 
-reset = Button(Main_timetracker, text='Reset',width=8, state='disabled', command=lambda:Reset(label))
-Record = Button(Main_timetracker, text="Record &\nReset",width=8, state='disabled', command=Record)
+start = Button(canvas, text='Start', width=8, command=lambda: Start(label))
+stop = Button(canvas, text='Pause',width=8,state='disabled', command=lambda: Stop()) 
+reset = Button(canvas, text='Reset',width=8, state='disabled', command=lambda: Reset(label))
+Record = Button(canvas, text="Record &\nReset",width=8, state='disabled', command=lambda: Record())
 
 start.place(x='40',y='70')
 reset.place(x='168',y='70')
@@ -403,6 +340,33 @@ stop.place(x='40',y='100')
 Record.place(x='168',y='110')
 
 
-#Luanch Main Window
-Main_timetracker.protocol('WM_DELETE_WINDOW',on_close)
-Main_timetracker.mainloop()
+
+canvas.pack()
+
+
+
+#Menubar Configuration
+menubar = Menu(MainForm)
+
+filemenu = Menu(menubar, tearoff=0)
+filemenu.add_command(label="Settings", command=lambda: Settings())
+filemenu.add_command(label="Exit", command=canvas.quit)
+menubar.add_cascade(label="File", menu=filemenu)
+
+viewmenu = Menu(menubar, tearoff=0)
+viewmenu.add_command(label="Recorded History", command=lambda: TableView())
+menubar.add_cascade(label="View", menu=viewmenu)
+
+helpmenu = Menu(menubar, tearoff=0)
+helpmenu.add_command(label="About...", command='')
+menubar.add_cascade(label="Help", menu=helpmenu)
+
+MainForm.config(menu=menubar)
+
+def on_close():
+    response=messagebox.askyesno('Exit','Exit?\n\n(Un-Recorded times will be lost!!)')
+    if response:
+        MainForm.destroy()
+
+MainForm.protocol('WM_DELETE_WINDOW',on_close)
+MainForm.mainloop()
