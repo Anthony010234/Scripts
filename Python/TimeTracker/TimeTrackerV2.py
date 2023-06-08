@@ -304,15 +304,6 @@ def Settings():
 
 
 
-
-
-
-
-
-
-
-
-
 ############### MAIN FORM FOR TIME TRACKER ###############
 
 MainForm = tk.Tk()
