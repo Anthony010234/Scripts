@@ -297,6 +297,9 @@ def Settings():
 
     MainForm.withdraw()
 
+    Window.lift()
+    
+
     Window.protocol("WM_DELETE_WINDOW", on_close)
     canvas.pack()
 
