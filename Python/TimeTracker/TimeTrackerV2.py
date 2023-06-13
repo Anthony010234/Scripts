@@ -92,7 +92,7 @@ def Start(label):
     start['state']='disabled'
     stop['state']='normal'
     reset['state']='disabled'
-    Record['state']='disabled'
+    record['state']='disabled'
     label.config(bg='Green')
 
 
@@ -118,7 +118,7 @@ def Stop():
     start['state']='normal'
     stop['state']='disabled'
     reset['state']='normal'
-    Record['state']='normal'
+    record['state']='normal'
 
 def Record():
 
@@ -142,7 +142,7 @@ def Record():
 
         if running==False:       
             reset['state']='disabled'
-            Record['state']='disabled'
+            record['state']='disabled'
             label['text']='00:00:00'
             label.config(bg='white')
 
@@ -160,7 +160,7 @@ def Reset(label):
         # If reset is pressed after pressing stop. 
         if running==False:       
             reset['state']='disabled'
-            Record['state']='disabled'
+            record['state']='disabled'
             label['text']='00:00:00'
             label.config(bg='white')
         
@@ -298,7 +298,27 @@ def Settings():
     Window.protocol("WM_DELETE_WINDOW", on_close)
     canvas.pack()
 
+def About():
+    Window = tk.Toplevel()
+    Window.resizable(False,False)
+    canvas = tk.Canvas(Window, height=50, width=WIDTH)
 
+    About_Label = Message(Window, text="Work Time Tracker", width=400,font=('Arial', 24))
+    About_Label3 = Message(Window, text="This app was designed to help with time management while working from home.\n", width=300,font=('Arial', 10))
+    About_Label2 = Message(Window, text="App Created By: Anthony\nIcon made by EpicCoders from https://icon-icons.com/\n\nCode References:\nhttps://www.geeksforgeeks.org/create-stopwatch-using-python/", width=400,font=('Arial', 10))
+    
+    About_Label.pack()
+    About_Label3.pack()
+    About_Label2.pack()
+    
+    
+    def on_close():
+        MainForm.deiconify()
+        Window.destroy()
+
+    MainForm.withdraw()
+    Window.protocol("WM_DELETE_WINDOW", on_close)
+    canvas.pack()
 
 
 
@@ -308,6 +328,7 @@ def Settings():
 
 MainForm = tk.Tk()
 MainForm.title("Python Guides")
+MainForm.resizable(False,False)
 
 
 
@@ -323,12 +344,12 @@ label.place(relx=0.12, rely=0.05)
 start = Button(canvas, text='Start', width=8, command=lambda: Start(label))
 stop = Button(canvas, text='Pause',width=8,state='disabled', command=lambda: Stop()) 
 reset = Button(canvas, text='Reset',width=8, state='disabled', command=lambda: Reset(label))
-Record = Button(canvas, text="Record &\nReset",width=8, state='disabled', command=lambda: Record())
+record = Button(canvas, text="Record &\nReset",width=8, state='disabled', command=lambda: Record())
 
 start.place(x='40',y='70')
 reset.place(x='168',y='70')
 stop.place(x='40',y='100')
-Record.place(x='168',y='110')
+record.place(x='168',y='110')
 
 
 
@@ -349,7 +370,7 @@ viewmenu.add_command(label="Recorded History", command=lambda: TableView())
 menubar.add_cascade(label="View", menu=viewmenu)
 
 helpmenu = Menu(menubar, tearoff=0)
-helpmenu.add_command(label="About...", command='')
+helpmenu.add_command(label="About...", command=lambda: About())
 menubar.add_cascade(label="Help", menu=helpmenu)
 
 MainForm.config(menu=menubar)
