@@ -329,7 +329,7 @@ def About():
 ############### MAIN FORM FOR TIME TRACKER ###############
 
 MainForm = tk.Tk()
-MainForm.title("Python Guides")
+MainForm.title("Time Tracker")
 MainForm.resizable(False,False)
 
 
